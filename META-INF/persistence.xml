@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="persistenceUnit">
+        <class>fr.polytech.cloud.userapp.entities.UserEntity</class>
+        <properties>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://bwnxxqpx94u6xym578mp-mysql.services.clever-cloud.com:3306"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+        </properties>
+    </persistence-unit>
+</persistence>
