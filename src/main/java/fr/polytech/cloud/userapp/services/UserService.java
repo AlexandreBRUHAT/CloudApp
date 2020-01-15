@@ -4,6 +4,7 @@ import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.entities.UserEntity;
 import fr.polytech.cloud.userapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,13 +20,25 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserEntity> getUsers() {
-        return userRepository.findAll();
+    public List<UserEntity> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).getContent();
     }
 
-    public void putUsers(List<UserEntity> users) {
+    public UserEntity getUser(String id) {
+        return userRepository.findById(id).orElse(new UserEntity());
+    }
 
-        userRepository.saveAll(users);
+    public List<UserEntity> putUsers(List<UserEntity> users) {
+
+        return userRepository.saveAll(users);
+    }
+
+    public UserEntity putUser(UserEntity user) {
+        return userRepository.save(user);
+    }
+
+    public UserEntity postUser(UserEntity user) {
+        return userRepository.save(user);
     }
 
     public void deleteUsers() {
