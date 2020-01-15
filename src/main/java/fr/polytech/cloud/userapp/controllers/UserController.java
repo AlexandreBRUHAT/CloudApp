@@ -3,6 +3,7 @@ package fr.polytech.cloud.userapp.controllers;
 import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -57,7 +58,12 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     public ResponseEntity deleteUser(@PathVariable String id) {
-        userService.deleteUser(id);
+        try {
+            userService.deleteUser(id);
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -3,8 +3,8 @@ package fr.polytech.cloud.userapp.services;
 import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.entities.UserEntity;
 import fr.polytech.cloud.userapp.repositories.UserRepository;
-import main.java.fr.polytech.cloud.userapp.dtos.UserFullDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,7 @@ public class UserService {
     }
 
     public List<UserEntity> getUsers(Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber(), 100);
         return userRepository.findAll(pageable).getContent();
     }
 
@@ -35,9 +36,23 @@ public class UserService {
     }
 
     public UserEntity putUser(String id, UserEntity entity) {
-        entity.setId(id);
 
-        return userRepository.save(entity);
+        UserEntity user = userRepository.getOne(id);
+
+        if (entity.getBirthday() != null) {
+            user.setBirthday(entity.getBirthday());
+        }
+        if (entity.getFirstname() != null) {
+            user.setFirstname(entity.getFirstname());
+        }
+        if (entity.getLastname() != null) {
+            user.setLastname(entity.getLastname());
+        }
+        if (entity.getPosition() != null) {
+            user.setPosition(entity.getPosition());
+        }
+
+        return userRepository.save(user);
     }
 
     public UserEntity postUser(UserEntity user) {
@@ -49,6 +64,7 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
+
         userRepository.deleteById(id);
     }
 
@@ -58,9 +74,5 @@ public class UserService {
 
     public List<UserDTO> mapToDTOs(List<UserEntity> entities) {
         return entities.stream().map(userEntity -> userEntity.mapToDTO()).collect(Collectors.toList());
-    }
-
-    public List<UserFullDTO> mapToFullDTOs(List<UserEntity> entities) {
-        return entities.stream().map(userEntity -> userEntity.mapToFullDTO()).collect(Collectors.toList());
     }
 }

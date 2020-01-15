@@ -66,8 +66,10 @@ public class UserDTO {
         UserEntity userEntity = new UserEntity();
         userEntity.setFirstname(this.firstName);
         userEntity.setLastname(this.lastName);
-        userEntity.setPosition(geometryFactory.createPoint(new Coordinate(this.position.getLat(), this.position.getLon())));
         userEntity.setBirthday(this.birthDay);
+
+        if (this.position != null)
+            userEntity.setPosition(geometryFactory.createPoint(new Coordinate(this.position.getLat(), this.position.getLon())));
 
         return userEntity;
     }

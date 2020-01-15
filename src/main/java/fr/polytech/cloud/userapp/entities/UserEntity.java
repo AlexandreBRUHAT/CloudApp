@@ -2,7 +2,6 @@ package fr.polytech.cloud.userapp.entities;
 
 import fr.polytech.cloud.userapp.dtos.Position;
 import fr.polytech.cloud.userapp.dtos.UserDTO;
-import main.java.fr.polytech.cloud.userapp.dtos.UserFullDTO;
 import org.hibernate.annotations.GenericGenerator;
 import org.locationtech.jts.geom.Geometry;
 
@@ -93,20 +92,12 @@ public class UserEntity {
         userDTO.setId(this.id);
         userDTO.setFirstName(this.firstname);
         userDTO.setLastName(this.lastname);
-        userDTO.setPosition(new Position(this.position.getCoordinate().getX(), this.position.getCoordinate().getY()));
         userDTO.setBirthDay(this.birthday);
+
+        if (this.position != null)
+            userDTO.setPosition(new Position(this.position.getCoordinate().getX(), this.position.getCoordinate().getY()));
 
         return userDTO;
     }
 
-    public UserFullDTO mapToFullDTO() {
-        UserFullDTO userDTO = new UserFullDTO();
-        userDTO.setId(this.id);
-        userDTO.setFirstName(this.firstname);
-        userDTO.setLastName(this.lastname);
-        userDTO.setPosition(new Position(this.position.getCoordinate().getX(), this.position.getCoordinate().getY()));
-        userDTO.setBirthDay(this.birthday);
-
-        return userDTO;
-    }
 }
