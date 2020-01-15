@@ -1,4 +1,4 @@
-package fr.polytech.cloud.userapp.dtos;
+package main.java.fr.polytech.cloud.userapp.dtos;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.polytech.cloud.userapp.entities.UserEntity;
@@ -8,7 +8,7 @@ import fr.polytech.cloud.userapp.dtos.Position;
 
 import java.sql.Date;
 
-public class UserDTO {
+public class UserFullDTO {
 
     private String id;
     private String firstName;
@@ -17,15 +17,7 @@ public class UserDTO {
     @JsonFormat(pattern="dd/MM/yyyy")
     private Date birthDay;
 
-    public UserDTO() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public UserFullDTO() {
     }
 
     public String getFirstName() {
@@ -58,6 +50,14 @@ public class UserDTO {
 
     public void setBirthDay(Date birthDay) {
         this.birthDay = birthDay;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public UserEntity mapToEntity() {

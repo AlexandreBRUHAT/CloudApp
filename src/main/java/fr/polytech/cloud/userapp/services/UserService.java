@@ -3,6 +3,7 @@ package fr.polytech.cloud.userapp.services;
 import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.entities.UserEntity;
 import fr.polytech.cloud.userapp.repositories.UserRepository;
+import main.java.fr.polytech.cloud.userapp.dtos.UserFullDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,8 +34,10 @@ public class UserService {
         return userRepository.saveAll(users);
     }
 
-    public UserEntity putUser(UserEntity user) {
-        return userRepository.save(user);
+    public UserEntity putUser(String id, UserEntity entity) {
+        entity.setId(id);
+
+        return userRepository.save(entity);
     }
 
     public UserEntity postUser(UserEntity user) {
@@ -45,11 +48,19 @@ public class UserService {
         userRepository.deleteAll();
     }
 
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
+    }
+
     public List<UserEntity> mapToEntities(List<UserDTO> dtos) {
         return dtos.stream().map(userDTO -> userDTO.mapToEntity()).collect(Collectors.toList());
     }
 
     public List<UserDTO> mapToDTOs(List<UserEntity> entities) {
         return entities.stream().map(userEntity -> userEntity.mapToDTO()).collect(Collectors.toList());
+    }
+
+    public List<UserFullDTO> mapToFullDTOs(List<UserEntity> entities) {
+        return entities.stream().map(userEntity -> userEntity.mapToFullDTO()).collect(Collectors.toList());
     }
 }

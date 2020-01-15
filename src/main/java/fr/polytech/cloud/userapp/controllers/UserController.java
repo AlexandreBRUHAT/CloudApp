@@ -4,11 +4,13 @@ import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @Controller
@@ -38,18 +40,24 @@ public class UserController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<UserDTO> getUser(String id) {
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         return new ResponseEntity<>(userService.getUser(id).mapToDTO(), HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<UserDTO> putUser(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity(userService.putUser(userDTO.mapToEntity()).mapToDTO(), HttpStatus.CREATED);
+    @PutMapping("/user/{id}")
+    public ResponseEntity<UserDTO> putUser(@PathVariable String id, @RequestBody UserDTO user) {
+        return new ResponseEntity(userService.putUser(id, user.mapToEntity()).mapToDTO(), HttpStatus.CREATED);
     }
 
-    @PostMapping
+    @PostMapping("/user")
     public ResponseEntity<UserDTO> postUser(@RequestBody UserDTO userDTO) {
         return new ResponseEntity(userService.postUser(userDTO.mapToEntity()).mapToDTO(), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity deleteUser(@PathVariable String id) {
+        userService.deleteUser(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }
