@@ -24,4 +24,4 @@ jobs:
            sed -i "s/8000/8080/g" baseUrl.js  
            npm install
            npm run test
-           kill $(ps -ef | grep "java -jar target/userapp-0.0.1-SNAPSHOT.jar" | awk '{print $2}')          
+           kill $(pgrep "java")          
