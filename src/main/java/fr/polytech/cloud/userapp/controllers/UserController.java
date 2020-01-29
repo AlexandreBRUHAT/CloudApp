@@ -5,14 +5,14 @@ import fr.polytech.cloud.userapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 public class UserController {
@@ -31,7 +31,6 @@ public class UserController {
 
     @PutMapping("/user")
     public ResponseEntity<List<UserDTO>> putUsers(@RequestBody List<UserDTO> users) {
-        userService.putUsers(userService.mapToEntities(users));
         return new ResponseEntity(userService.mapToDTOs(userService.putUsers(userService.mapToEntities(users))), HttpStatus.CREATED);
     }
 
@@ -43,12 +42,22 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
-        return new ResponseEntity<>(userService.getUser(id).mapToDTO(), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(userService.getUser(id).mapToDTO(), HttpStatus.OK);
+        } catch (EmptyResultDataAccessException | NoSuchElementException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/user/{id}")
     public ResponseEntity<UserDTO> putUser(@PathVariable String id, @RequestBody UserDTO user) {
-        return new ResponseEntity(userService.putUser(id, user.mapToEntity()).mapToDTO(), HttpStatus.CREATED);
+        try {
+            return new ResponseEntity(userService.putUser(id, user.mapToEntity()).mapToDTO(), HttpStatus.OK);
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (EntityNotFoundException enfe) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/user")
@@ -61,7 +70,7 @@ public class UserController {
         try {
             userService.deleteUser(id);
         } catch (EmptyResultDataAccessException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity(HttpStatus.OK);

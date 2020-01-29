@@ -4,11 +4,15 @@ import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.entities.UserEntity;
 import fr.polytech.cloud.userapp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,8 +30,9 @@ public class UserService {
         return userRepository.findAll(pageable).getContent();
     }
 
-    public UserEntity getUser(String id) {
-        return userRepository.findById(id).orElse(new UserEntity());
+    // TODO : NOT OPTIONAL
+    public UserEntity getUser(String id) throws NoSuchElementException {
+        return userRepository.findById(id).get();
     }
 
     public List<UserEntity> putUsers(List<UserEntity> users) {
@@ -35,7 +40,7 @@ public class UserService {
         return userRepository.saveAll(users);
     }
 
-    public UserEntity putUser(String id, UserEntity entity) {
+    public UserEntity putUser(String id, UserEntity entity) throws EntityNotFoundException {
 
         UserEntity user = userRepository.getOne(id);
 
