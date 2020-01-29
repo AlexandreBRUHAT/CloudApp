@@ -113,7 +113,7 @@ public class UserService {
 
         GeometryFactory geometryFactory = new GeometryFactory();
 
-        return userRepository.findByPositionnNear(geometryFactory.createPoint(new Coordinate(lat, lon)));
+        return userRepository.findByPositionNear(geometryFactory.createPoint(new Coordinate(lat, lon)));
     }
 
     public List<UserEntity> mapToEntities(List<UserDTO> dtos) {
