@@ -5,6 +5,7 @@ import fr.polytech.cloud.userapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<UserDTO>> getUsers(Pageable pageable) {
+    public ResponseEntity<List<UserDTO>> getUsers(@PageableDefault(size = 100) Pageable pageable) {
         return new ResponseEntity<>(userService.mapToDTOs(userService.getUsers(pageable)), HttpStatus.OK);
     }
 
