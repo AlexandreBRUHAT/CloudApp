@@ -1,6 +1,6 @@
 name: CI Cloud
 
-on: [push,pull_request]
+on: [pull_request]
 
 jobs:
   Setup:
@@ -17,11 +17,11 @@ jobs:
       run: |
            mvn -B clean compile --file pom.xml
            mvn -B package --file pom.xml
-           java -jar target/userapp-0.0.1-SNAPSHOT.jar &
+           java -jar '-Dspring.profiles.active=dev' target/userapp-0.0.1-SNAPSHOT.jar &
            sleep 3 &          
            git clone https://github.com/Slashgear/cloud-client-eval.git
            cd cloud-client-eval
            sed -i "s/8000/8080/g" baseUrl.js  
            npm install
            npm run test
-           kill $(pgrep "java")          
+           kill $(pgrep "java")        
