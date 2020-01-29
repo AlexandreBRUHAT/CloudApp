@@ -106,12 +106,12 @@ public class UserService {
         return userRepository.findByLastnameEquals(pageable, name);
     }
 
-//    public List<UserEntity> getPositionNear(double lat, double lon, Pageable page) {
-//
-//        GeometryFactory geometryFactory = new GeometryFactory();
-//
-//        return userRepository.findByPositionNear(geometryFactory.createPoint(new Coordinate(lat, lon)));
-//    }
+    public List<UserEntity> getPositionNear(double lat, double lon, Pageable page) {
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+
+        return userRepository.findByPosition(lon, lat, page.getPageSize());
+    }
 
     public List<UserEntity> mapToEntities(List<UserDTO> dtos) {
         return dtos.stream().map(userDTO -> userDTO.mapToEntity()).collect(Collectors.toList());

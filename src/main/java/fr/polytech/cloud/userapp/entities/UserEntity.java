@@ -95,7 +95,7 @@ public class UserEntity {
         userDTO.setBirthDay(this.birthday);
 
         if (this.position != null)
-            userDTO.setPosition(new Position(this.position.getCoordinate().getX(), this.position.getCoordinate().getY()));
+            userDTO.setPosition(new Position(this.position.getCoordinate().getY(), this.position.getCoordinate().getX()));
 
         return userDTO;
     }

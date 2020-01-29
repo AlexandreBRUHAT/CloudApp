@@ -69,7 +69,7 @@ public class UserDTO {
         userEntity.setBirthday(this.birthDay);
 
         if (this.position != null)
-            userEntity.setPosition(geometryFactory.createPoint(new Coordinate(this.position.getLat(), this.position.getLon())));
+            userEntity.setPosition(geometryFactory.createPoint(new Coordinate(this.position.getLon(), this.position.getLat())));
 
         return userEntity;
     }

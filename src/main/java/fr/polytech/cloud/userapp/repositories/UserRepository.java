@@ -27,5 +27,6 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     public List<UserEntity> findByLastnameEquals(Pageable page, String equals);
 
-//    public List<UserEntity> findByPositionNear(Geometry point);
+    @Query(value = "SELECT  * from USER order by  st_distance_sphere(Point(?1, ?2), position) LIMIT ?3", nativeQuery = true)
+    public List<UserEntity> findByPosition(double lon, double lat, int size);
 }

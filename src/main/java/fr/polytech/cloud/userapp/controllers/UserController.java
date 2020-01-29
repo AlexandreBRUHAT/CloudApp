@@ -103,8 +103,8 @@ public class UserController {
         return new ResponseEntity<>(userService.mapToDTOs(userService.getByName(name, pageable)), HttpStatus.OK);
     }
 
-//    @GetMapping("/user/nearest")
-//    public ResponseEntity<List<UserDTO>> getNearest(@RequestParam double lat, @RequestParam double lon) {
-//        return new ResponseEntity<>(userService.mapToDTOs(userService.getPositionNear(lat, lon)), HttpStatus.OK);
-//    }
+    @GetMapping("/user/nearest")
+    public ResponseEntity<List<UserDTO>> getNearest(@RequestParam double lat, @RequestParam double lon, @PageableDefault(size = 10) Pageable pageable) {
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getPositionNear(lat, lon, pageable)), HttpStatus.OK);
+    }
 }
