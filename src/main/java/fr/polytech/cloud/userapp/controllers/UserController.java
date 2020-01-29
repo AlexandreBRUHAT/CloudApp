@@ -79,20 +79,28 @@ public class UserController {
     }
 
     @GetMapping(path = "/user/age", params = {"gt"})
-    public ResponseEntity<List<UserDTO>> getAgeGreaterThan(@RequestParam(value = "gt") int age) {
+    public ResponseEntity<List<UserDTO>> getAgeGreaterThan(@RequestParam(value = "gt") int age, @PageableDefault(size = 100) Pageable pageable) {
 
-        return new ResponseEntity<>(userService.mapToDTOs(userService.getByAgeGreaterThan(age)), HttpStatus.OK);
+        if (age < 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getByAgeGreaterThan(age, pageable)), HttpStatus.OK);
     }
     @GetMapping(path = "/user/age", params = {"eq"})
-    public ResponseEntity<List<UserDTO>> getAgeEquals(@RequestParam(value = "eq") int eq) {
+    public ResponseEntity<List<UserDTO>> getAgeEquals(@RequestParam(value = "eq") int eq, @PageableDefault(size = 100) Pageable pageable) {
 
-        return new ResponseEntity<>(userService.mapToDTOs(userService.getByAgeEquals(eq)), HttpStatus.OK);
+        if (eq < 0) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getByAgeEquals(eq, pageable)), HttpStatus.OK);
     }
 
     @GetMapping(path = "/user/search", params = {"term"})
-    public ResponseEntity<List<UserDTO>> getAgeEquals(@RequestParam(value = "term") String name) {
+    public ResponseEntity<List<UserDTO>> getNameEquals(@RequestParam(value = "term") String name, @PageableDefault(size = 10) Pageable pageable) {
 
-        return new ResponseEntity<>(userService.mapToDTOs(userService.getByName(name)), HttpStatus.OK);
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getByName(name, pageable)), HttpStatus.OK);
     }
 
 //    @GetMapping("/user/nearest")

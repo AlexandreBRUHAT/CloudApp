@@ -24,9 +24,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private Pageable pageable = PageRequest.of(0, 100);
-    private Pageable pageableTen = PageRequest.of(0, 10);
-
     private UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -80,7 +77,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public List<UserEntity> getByAgeGreaterThan(int age) {
+    public List<UserEntity> getByAgeGreaterThan(int age, Pageable pageable) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR,-age);
@@ -88,7 +85,7 @@ public class UserService {
         return userRepository.findByBirthdayLessThan(pageable, calendar.getTime());
     }
 
-    public List<UserEntity> getByAgeEquals(int age) {
+    public List<UserEntity> getByAgeEquals(int age, Pageable pageable) {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR,-age - 1);
@@ -105,11 +102,11 @@ public class UserService {
         return userRepository.findByBirthdayGreaterThanAndBirthdayLessThan(pageable, start, end);
     }
 
-    public List<UserEntity> getByName(String name) {
+    public List<UserEntity> getByName(String name, Pageable pageable) {
         return userRepository.findByLastnameEquals(pageable, name);
     }
 
-//    public List<UserEntity> getPositionNear(double lat, double lon) {
+//    public List<UserEntity> getPositionNear(double lat, double lon, Pageable page) {
 //
 //        GeometryFactory geometryFactory = new GeometryFactory();
 //
