@@ -26,7 +26,8 @@ public class UserService {
     }
 
     public List<UserEntity> getUsers(Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber(), 100);
+        if (!pageable.isPaged())
+            pageable = PageRequest.of(pageable.getPageNumber(), 100);
         return userRepository.findAll(pageable).getContent();
     }
 
