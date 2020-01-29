@@ -1,4 +1,4 @@
-name: Test
+name: CI Cloud
 
 on: [push,pull_request]
 
@@ -13,7 +13,7 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Installing
+    - name: Running tests
       run: |
            mvn -B clean compile --file pom.xml
            mvn -B package --file pom.xml
@@ -24,5 +24,4 @@ jobs:
            sed -i "s/8000/8080/g" baseUrl.js  
            npm install
            npm run test
-
-           
+           kill $(pgrep "java")          
