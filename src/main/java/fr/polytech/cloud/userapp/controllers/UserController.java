@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -75,5 +76,27 @@ public class UserController {
         }
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user/age", params = {"gt"})
+    public ResponseEntity<List<UserDTO>> getAgeGreaterThan(@RequestParam(value = "gt") int age) {
+
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getByAgeGreaterThan(age)), HttpStatus.OK);
+    }
+    @GetMapping(path = "/user/age", params = {"eq"})
+    public ResponseEntity<List<UserDTO>> getAgeEquals(@RequestParam(value = "eq") int eq) {
+
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getByAgeEquals(eq)), HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/user/search", params = {"term"})
+    public ResponseEntity<List<UserDTO>> getAgeEquals(@RequestParam(value = "term") String name) {
+
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getByName(name)), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/nearest")
+    public ResponseEntity<List<UserDTO>> getNearest(@RequestParam double lat, @RequestParam double lon) {
+        return new ResponseEntity<>(userService.mapToDTOs(userService.getPositionNear(lat, lon)), HttpStatus.OK);
     }
 }

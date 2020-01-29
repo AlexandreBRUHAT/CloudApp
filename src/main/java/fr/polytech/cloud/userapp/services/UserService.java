@@ -3,16 +3,19 @@ package fr.polytech.cloud.userapp.services;
 import fr.polytech.cloud.userapp.dtos.UserDTO;
 import fr.polytech.cloud.userapp.entities.UserEntity;
 import fr.polytech.cloud.userapp.repositories.UserRepository;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +23,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private Pageable pageable = PageRequest.of(0, 100);
+    private Pageable pageableTen = PageRequest.of(0, 10);
 
     private UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -72,6 +78,42 @@ public class UserService {
     public void deleteUser(String id) {
 
         userRepository.deleteById(id);
+    }
+
+    public List<UserEntity> getByAgeGreaterThan(int age) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR,-age);
+
+        return userRepository.findByBirthdayLessThan(pageable, calendar.getTime());
+    }
+
+    public List<UserEntity> getByAgeEquals(int age) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR,-age - 1);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+
+        Date start = calendar.getTime();
+
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR,-age + 1);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+
+        Date end = calendar.getTime();
+
+        return userRepository.findByBirthdayGreaterThanAndBirthdayLessThan(pageable, start, end);
+    }
+
+    public List<UserEntity> getByName(String name) {
+        return userRepository.findByLastnameEquals(pageable, name);
+    }
+
+    public List<UserEntity> getPositionNear(double lat, double lon) {
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+
+        return userRepository.findByPositionNear(geometryFactory.createPoint(new Coordinate(lat, lon)));
     }
 
     public List<UserEntity> mapToEntities(List<UserDTO> dtos) {
