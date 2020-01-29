@@ -27,5 +27,5 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     public List<UserEntity> findByLastnameEquals(Pageable page, String equals);
 
-    public List<UserEntity> findByPositionNear(Geometry point);
+//    public List<UserEntity> findByPositionNear(Geometry point);
 }
